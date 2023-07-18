@@ -15,36 +15,6 @@ st.set_page_config(
     
 )
 
-def options_chain(symbol):
-
-    tk = yf.Ticker(symbol)
-    # Expiration dates
-    exps = tk.options
-
-    # Get options for each expiration
-    options = pd.DataFrame()
-    for e in exps:
-        opt = tk.option_chain(e)
-        opt = pd.DataFrame()._append(opt.calls)._append(opt.puts)
-        opt['expirationDate'] = e
-        options = options._append(opt, ignore_index=True)
-
-    # Bizarre error in yfinance that gives the wrong expiration date
-    # Add 1 day to get the correct expiration date
-    options['expirationDate'] = pd.to_datetime(options['expirationDate']) + datetime.timedelta(days = 1)
-    options['dte'] = (options['expirationDate'] - datetime.datetime.today()).dt.days / 365
-    
-    # Boolean column if the option is a CALL
-    options['CALL'] = options['contractSymbol'].str[4:].apply(
-        lambda x: "C" in x)
-    
-    options[['bid', 'ask', 'strike']] = options[['bid', 'ask', 'strike']].apply(pd.to_numeric)
-    options['mark'] = (options['bid'] + options['ask']) / 2 # Calculate the midpoint of the bid-ask
-    
-    # Drop unnecessary and meaningless columns
-    options = options.drop(columns = ['contractSize', 'currency', 'change', 'percentChange', 'lastTradeDate', 'lastPrice'])
-
-    return options
 
 
 def options_chain(symbol,expirationDate):
@@ -55,11 +25,13 @@ def options_chain(symbol,expirationDate):
 
     # Get options for each expiration
     options = pd.DataFrame()
-    
-    opt = tk.option_chain(expirationDate)
-    opt = pd.DataFrame()._append(opt.calls)._append(opt.puts)
-    options = options._append(opt, ignore_index=True)
-
+    try:
+        opt = tk.option_chain(expirationDate)
+        opt = pd.DataFrame()._append(opt.calls)._append(opt.puts)
+        options = options._append(opt, ignore_index=True)
+        
+    except:
+        pass
     
     # Boolean column if the option is a CALL
     options['CALL'] = options['contractSymbol'].str[4:].apply(
@@ -93,23 +65,22 @@ class instrument:
         
         
     def update(self):
-        def sub_execute():
-            if self.option:
-                data=(options_chain(self.ticker,self.expirationDate))
-                self.current_price=round((round(data[data["contractSymbol"]==self.option_ticker].iloc[-1]["ask"],3)+round(data[data["contractSymbol"]==self.option_ticker].iloc[-1]["bid"],3))/2,3)
-                self.market_value=self.current_price*self.qty*100
-                tk = yf.Ticker(self.ticker)
-                data = tk.history()
-                last_quote = data['Close'].iloc[-1]
-                self.underlying_price=round(last_quote,3)
-            else:
-                tk = yf.Ticker(self.ticker)
-                data = tk.history()
-                last_quote = data['Close'].iloc[-1]
-                self.current_price=round(last_quote,3)
-                self.market_value=self.current_price*self.qty
-                self.underlying_price=self.current_price
-        threading.Thread(target=sub_execute).start()
+        if self.option:
+            data=(options_chain(self.ticker,self.expirationDate))
+            self.current_price=round((round(data[data["contractSymbol"]==self.option_ticker].iloc[-1]["ask"],3)+round(data[data["contractSymbol"]==self.option_ticker].iloc[-1]["bid"],3))/2,3)
+            self.market_value=self.current_price*self.qty*100
+            tk = yf.Ticker(self.ticker)
+            data = tk.history()
+            last_quote = data['Close'].iloc[-1]
+            self.underlying_price=round(last_quote,3)
+        else:
+            tk = yf.Ticker(self.ticker)
+            data = tk.history()
+            last_quote = data['Close'].iloc[-1]
+            self.current_price=round(last_quote,3)
+            self.market_value=self.current_price*self.qty
+            self.underlying_price=self.current_price
+
 
     def add_note(self,note:str):
         self.note=note
@@ -171,4 +142,4 @@ if __name__=="__main__" :
         table={"代码":tickers,"期权?":options,"期权方向":directions,"期权到期日":experiationdates,"行权价":strikes,"中文":chinese_names,"头寸数量":qtys,"平均持仓价格":cost_prices,"现价(期权价格为中间价)":current_prices,"标的资产价格":under,"市场价值":market_values,"未实现盈亏":pnl,"说明":notes}
         df=pd.DataFrame(data=table)
         t.dataframe(df)
-        time.sleep(1)
+        time.sleep(5)
