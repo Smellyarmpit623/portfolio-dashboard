@@ -145,6 +145,6 @@ if __name__=="__main__" :
         table={"代码":tickers,"期权?":options,"期权方向":directions,"期权到期日":experiationdates,"行权价":strikes,"中文":chinese_names,"头寸数量":qtys,"平均持仓价格":cost_prices,"现价(期权价格为中间价)":current_prices,"标的资产价格":under,"市场价值":market_values,"未实现盈亏":pnl,"说明":notes}
         df=pd.DataFrame(data=table)
         t.dataframe(df)
-        netvalue.write("Net liquidate value 净清算值: "+str(round(nlv,3))+" 澳元: "+str(round(nlv*1.4679,3)))
-        netvalue_note.write("净清算值仅为理论值 具体值以最终值为准")
+        netvalue.text("Net liquidate value 净清算值: $"+str(round(nlv,3))+" 澳元: $"+str(round(nlv*1.4679,3)))
+        netvalue_note.text("净清算值仅为理论值 具体值以最终值为准\n由于期权流通性问题期权现价用中间值计算 并非最新成交价")
         time.sleep(5)
