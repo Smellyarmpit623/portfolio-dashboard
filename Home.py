@@ -87,6 +87,8 @@ class instrument:
             
 if __name__=="__main__" :
     t = st.empty()
+    netvalue = st.empty()
+    netvalue_note=st.empty()
     new=instrument(ticker="SOXL",qty=110,cost_price=3.161,chinese_name="三倍做多半导体",option=True,option_ticker="SOXL240119C00030000",expirationDate='2024-01-19',strike=30,direction="看涨期权")
     new1=instrument(ticker="SOXL",qty=35,cost_price=6.753,chinese_name="三倍做多半导体",option=True,option_ticker="SOXL250117C00040000",expirationDate='2025-01-17',strike=40,direction="看涨期权")
     new2=instrument(ticker="TNA",qty=15,cost_price=8.505,chinese_name="三倍做多罗素2000小盘股",option=True,option_ticker="TNA250117C00040000",expirationDate='2025-01-17',strike=40,direction="看涨期权")
@@ -118,7 +120,7 @@ if __name__=="__main__" :
     while True:
         for i in list1:
             i.update()
-        tickers,options,directions,experiationdates,chinese_names,qtys,cost_prices,current_prices,market_values,strikes,notes,pnl,theo,under=[],[],[],[],[],[],[],[],[],[],[],[],[],[]
+        tickers,options,directions,experiationdates,chinese_names,qtys,cost_prices,current_prices,market_values,strikes,notes,pnl,theo,under,nlv=[],[],[],[],[],[],[],[],[],[],[],[],[],[],0.00
         for i in list1:
             tickers.append(i.ticker)
             options.append(i.option)
@@ -136,10 +138,13 @@ if __name__=="__main__" :
                 pnl.append((i.current_price-i.cost_price)*i.qty*100)
             else:
                 pnl.append((i.current_price-i.cost_price)*i.qty)
+            nlv+=i.market_value
             
             
             
         table={"代码":tickers,"期权?":options,"期权方向":directions,"期权到期日":experiationdates,"行权价":strikes,"中文":chinese_names,"头寸数量":qtys,"平均持仓价格":cost_prices,"现价(期权价格为中间价)":current_prices,"标的资产价格":under,"市场价值":market_values,"未实现盈亏":pnl,"说明":notes}
         df=pd.DataFrame(data=table)
         t.dataframe(df)
+        netvalue.write("Net liquidate value 净清算值: "+str(round(nlv,3))+" 澳元: "+str(round(nlv*1.4679,3)))
+        netvalue_note.write("净清算值仅为理论值 具体值以最终值为准")
         time.sleep(5)
