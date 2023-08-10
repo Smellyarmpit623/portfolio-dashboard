@@ -99,7 +99,7 @@ if __name__=="__main__" :
     new7=instrument(ticker="EZJ",qty=50,cost_price=1.46,chinese_name="MSCI 日本 ETF",option=True,option_ticker="EZJ240119C00041000",expirationDate='2024-01-19',strike=41,direction="看涨期权")
     new8=instrument(ticker="EWJ",qty=100,cost_price=0.809,chinese_name="IShare MSCI 日本 ETF",option=True,option_ticker="EWJ250117C00080000",expirationDate='2025-01-17',strike=80,direction="看涨期权")
     new9=instrument(ticker="HIBL",qty=11,cost_price=2.262,chinese_name="三倍做多 高Beta股",option=True,option_ticker="HIBL240216C00045000",expirationDate='2024-02-16',strike=45,direction="看涨期权")
-    new10=instrument(ticker="TMF",qty=110,cost_price=1.479,chinese_name="三倍做多20年期美国国债收益率指数",option=True,option_ticker="TMF250117C00010000",expirationDate='2025-01-17',strike=10,direction="看涨期权")
+    new10=instrument(ticker="TMF",qty=150,cost_price=1.479,chinese_name="三倍做多20年期美国国债收益率指数",option=True,option_ticker="TMF250117C00010000",expirationDate='2025-01-17',strike=10,direction="看涨期权")
     new11=instrument(ticker="PEY",qty=300,cost_price=19.675,chinese_name="Invesco 高收益股票股息 ETF",option=False)
     new12=instrument(ticker="PFE",qty=120,cost_price=36.199,chinese_name="辉瑞",option=False)
     new13=instrument(ticker="VZ",qty=100,cost_price=35.06,chinese_name="威瑞森",option=False)
