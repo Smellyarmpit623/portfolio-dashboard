@@ -89,7 +89,7 @@ if __name__=="__main__" :
     t = st.empty()
     netvalue = st.empty()
     netvalue_note=st.empty()
-    new=instrument(ticker="SOXL",qty=50,cost_price=3.161,chinese_name="三倍做多半导体",option=True,option_ticker="SOXL240119C00030000",expirationDate='2024-01-19',strike=30,direction="看涨期权")
+    new=instrument(ticker="SOXL",qty=20,cost_price=3.161,chinese_name="三倍做多半导体",option=True,option_ticker="SOXL240119C00030000",expirationDate='2024-01-19',strike=30,direction="看涨期权")
     new1=instrument(ticker="SOXL",qty=120,cost_price=5,chinese_name="三倍做多半导体",option=True,option_ticker="SOXL250117C00040000",expirationDate='2025-01-17',strike=40,direction="看涨期权")
     new2=instrument(ticker="TNA",qty=30,cost_price=8.505,chinese_name="三倍做多罗素2000小盘股",option=True,option_ticker="TNA250117C00040000",expirationDate='2025-01-17',strike=40,direction="看涨期权")
     new3=instrument(ticker="JEPI",qty=180,cost_price=54.686,chinese_name="摩根大通股票收入 ETF",option=False)
@@ -145,6 +145,6 @@ if __name__=="__main__" :
         table={"代码":tickers,"期权?":options,"期权方向":directions,"期权到期日":experiationdates,"行权价":strikes,"中文":chinese_names,"头寸数量":qtys,"平均持仓价格":cost_prices,"现价(期权价格为中间价)":current_prices,"标的资产价格":under,"市场价值":market_values,"未实现盈亏":pnl,"说明":notes}
         df=pd.DataFrame(data=table)
         t.dataframe(data=df)
-        netvalue.text("Net liquidate value 净清算值: $"+str(round(nlv,3))+" 澳元: $"+str(round(nlv*1.4679,3)))
+        netvalue.text("Net liquidate value 净清算值: $"+str(round(nlv,3))+" 澳元: $"+str(round(nlv*1.56499,3)))
         netvalue_note.text("净清算值仅为理论值 具体值以最终值为准\n由于期权流通性问题期权现价用中间值计算 并非最新成交价")
         time.sleep(5)
