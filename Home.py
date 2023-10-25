@@ -111,7 +111,7 @@ if __name__=="__main__" :
 
     
 
-    list1=[new,new1,new2,new3,new4,new5,new6,new7,new8,new9,new10,new11,new12,new13,new14,new15,new16,new17]
+    list1=[new,new1,new2,new3,new4,new9,new10,new11,new12,new13,new14,new15,new16,new17]
 
     while True:
         for i in list1:
